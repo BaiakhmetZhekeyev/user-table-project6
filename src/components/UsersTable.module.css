@@ -1,0 +1,15 @@
+.contentWrapper {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.tableWrapper {
+    width: 80vw;
+    margin-top: 20px;
+}
+
+.tableTitle {
+    font-weight: bold;
+    font-size: 25px;
+}
