@@ -62,7 +62,11 @@ function App() {
   };
 
   const deleteUser = (user) => {
-    setUsers(users.filter((curr) => user.id !== curr.id));
+    const usersArr = Array.from(users);
+    usersArr.forEach((curr) =>
+      curr.rating > user.rating ? curr.rating-- : curr.rating,
+    );
+    setUsers(usersArr.filter((curr) => user.id !== curr.id));
   };
 
   return (

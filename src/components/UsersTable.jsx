@@ -19,10 +19,24 @@ import EditIcon from "@mui/icons-material/Edit";
 export default function UsersTable({ users, setUsers, deleteUser }) {
   function handleOnDragEnd(result) {
     if (!result.destination) return;
-    const items = Array.from(users);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    setUsers(items);
+    const usersArr = Array.from(users);
+    const newIndex = result.destination.index;
+    const oldIndex = result.source.index;
+    const newRating = usersArr[newIndex].rating;
+    const oldRating = usersArr[oldIndex].rating;
+
+    for (let user of usersArr) {
+      if (user.rating < oldRating && user.rating >= newRating) {
+        user.rating = user.rating + 1;
+      } else if (user.rating > oldRating && user.rating <= newRating) {
+        user.rating = user.rating - 1;
+      }
+    }
+    usersArr[oldIndex].rating = newRating;
+
+    const [reorderedItem] = usersArr.splice(oldIndex, 1);
+    usersArr.splice(newIndex, 0, reorderedItem);
+    setUsers(usersArr);
   }
 
   return (
