@@ -54,11 +54,20 @@ function App() {
   ]);
 
   const [isModalActive, setIsModalActive] = React.useState(false);
+  const [userToEdit, setUserToEdit] = React.useState(null);
 
   const addUser = (user) => {
-    setUsers([...users, user]);
+    if (userToEdit === null) {
+      setUsers([...users, user]);
+    } else {
+      setUsers(
+        users.map((curr) => {
+          return curr.id !== user.id ? curr : user;
+        }),
+      );
+    }
     setIsModalActive(false);
-    console.log(users);
+    setUserToEdit(null);
   };
 
   const deleteUser = (user) => {
@@ -67,6 +76,11 @@ function App() {
       curr.rating > user.rating ? curr.rating-- : curr.rating,
     );
     setUsers(usersArr.filter((curr) => user.id !== curr.id));
+  };
+
+  const getUserToEdit = (user) => {
+    setUserToEdit(user);
+    setIsModalActive(true);
   };
 
   return (
@@ -83,9 +97,16 @@ function App() {
           setIsModalActive={setIsModalActive}
           addUser={addUser}
           tableLenght={users.length}
+          userToEdit={userToEdit}
+          setUserToEdit={setUserToEdit}
         />
       )}
-      <UsersTable users={users} setUsers={setUsers} deleteUser={deleteUser} />
+      <UsersTable
+        users={users}
+        setUsers={setUsers}
+        deleteUser={deleteUser}
+        getUserToEdit={getUserToEdit}
+      />
     </div>
   );
 }

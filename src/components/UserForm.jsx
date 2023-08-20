@@ -4,10 +4,16 @@ import { useFormik } from "formik";
 import { Button } from "@mui/material";
 import * as Yup from "yup";
 
-const UserForm = ({ setIsModalActive, addUser, tableLenght }) => {
-  const [image, setImage] = React.useState(null);
+const UserForm = ({
+  setIsModalActive,
+  addUser,
+  tableLenght,
+  userToEdit,
+  setUserToEdit,
+}) => {
+  const [image, setImage] = React.useState(userToEdit?.img || null);
   const formik = useFormik({
-    initialValues: {
+    initialValues: { ...userToEdit, img: null } || {
       img: null,
       firstName: "",
       lastName: "",
@@ -29,7 +35,17 @@ const UserForm = ({ setIsModalActive, addUser, tableLenght }) => {
         .max(15, "Must be 15 characters or less")
         .required("Reaquired"),
     }),
+
     onSubmit: (values) => {
+      if (userToEdit) {
+        addUser({
+          ...values,
+          id: userToEdit.id,
+          rating: userToEdit.rating,
+          img: image,
+        });
+        return;
+      }
       const userRating = tableLenght + 1;
       let userId = Date.now().toString();
       addUser({ ...values, id: userId, rating: userRating, img: image });
@@ -94,14 +110,19 @@ const UserForm = ({ setIsModalActive, addUser, tableLenght }) => {
               name="avatar"
               type="file"
               onChange={(event) => {
-                console.log(event.target.files[0]);
                 setImage(event.target.files[0]);
               }}
               value={formik.values.img}
             />
           </div>
           <div className={styled.btnGroup}>
-            <Button variant="outlined" onClick={() => setIsModalActive(false)}>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setIsModalActive(false);
+                setUserToEdit(null);
+              }}
+            >
               Cancel
             </Button>
             <Button type="submit" variant="contained">

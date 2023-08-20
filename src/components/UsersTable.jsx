@@ -2,7 +2,6 @@ import * as React from "react";
 import styled from "./UsersTable.module.css";
 import {
   Avatar,
-  Button,
   IconButton,
   Paper,
   Table,
@@ -15,28 +14,25 @@ import {
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import ReorderIcon from "@mui/icons-material/Reorder";
 
-export default function UsersTable({ users, setUsers, deleteUser }) {
+export default function UsersTable({
+  users,
+  setUsers,
+  deleteUser,
+  getUserToEdit,
+}) {
   function handleOnDragEnd(result) {
     if (!result.destination) return;
     const usersArr = Array.from(users);
-    const newIndex = result.destination.index;
-    const oldIndex = result.source.index;
-    const newRating = usersArr[newIndex].rating;
-    const oldRating = usersArr[oldIndex].rating;
-
-    for (let user of usersArr) {
-      if (user.rating < oldRating && user.rating >= newRating) {
-        user.rating = user.rating + 1;
-      } else if (user.rating > oldRating && user.rating <= newRating) {
-        user.rating = user.rating - 1;
-      }
-    }
-    usersArr[oldIndex].rating = newRating;
-
-    const [reorderedItem] = usersArr.splice(oldIndex, 1);
-    usersArr.splice(newIndex, 0, reorderedItem);
-    setUsers(usersArr);
+    const [reorderedItem] = usersArr.splice(result.source.index, 1);
+    usersArr.splice(result.destination.index, 0, reorderedItem);
+    setUsers(
+      usersArr.map((curr, index) => {
+        curr.rating = index + 1;
+        return curr;
+      }),
+    );
   }
 
   return (
@@ -70,7 +66,9 @@ export default function UsersTable({ users, setUsers, deleteUser }) {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                         >
-                          <TableCell {...provided.dragHandleProps}>=</TableCell>
+                          <TableCell {...provided.dragHandleProps}>
+                            <ReorderIcon />
+                          </TableCell>
                           <TableCell>
                             {user.img ? (
                               <Avatar src={URL.createObjectURL(user.img)} />
@@ -98,6 +96,7 @@ export default function UsersTable({ users, setUsers, deleteUser }) {
                               color="primary"
                               aria-label="delete"
                               size="small"
+                              onClick={() => getUserToEdit(user)}
                             >
                               <EditIcon fontSize="small" />
                             </IconButton>
