@@ -3,6 +3,7 @@ import UserForm from "./components/UserForm";
 import UsersTable from "./components/UsersTable";
 import { Button } from "@mui/material";
 import * as React from "react";
+import MyUpload from "./components/UI/MyUpload/MyUpload";
 
 function App() {
   const [users, setUsers] = React.useState([

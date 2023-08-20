@@ -3,6 +3,8 @@ import styled from "./UserForm.module.css";
 import { useFormik } from "formik";
 import { Button } from "@mui/material";
 import * as Yup from "yup";
+import TextField from "@mui/material/TextField";
+import MyUpload from "./UI/MyUpload/MyUpload";
 
 const UserForm = ({
   setIsModalActive,
@@ -23,17 +25,14 @@ const UserForm = ({
     validationSchema: Yup.object({
       firstName: Yup.string()
         .max(15, "Must be 15 characters or less")
-        .required("Reaquired"),
+        .required("Required"),
       lastName: Yup.string()
         .max(15, "Must be 15 characters or less")
-        .required("Reaquired"),
-      age: Yup.number("It must be number")
-        .min(16)
-        .max(100)
-        .required("Reaquired"),
+        .required("Required"),
+      age: Yup.number("It must be number").min(0).max(100).required("Required"),
       city: Yup.string()
         .max(15, "Must be 15 characters or less")
-        .required("Reaquired"),
+        .required("Required"),
     }),
 
     onSubmit: (values) => {
@@ -57,63 +56,86 @@ const UserForm = ({
       <div className={styled.modal}>
         <form onSubmit={formik.handleSubmit}>
           <div className={styled.formGroup}>
-            <label htmlFor="firstName">FirstName</label>
-            <input
+            <TextField
+              error={
+                formik.touched.firstName && formik.errors.firstName
+                  ? true
+                  : false
+              }
+              label="FirstName"
+              variant="outlined"
               name="firstName"
               onChange={formik.handleChange}
               value={formik.values.firstName}
               onBlur={formik.handleBlur}
             />
-            {formik.touched.firstName && formik.errors.firstName ? (
-              <p style={{ color: "red" }}>{formik.errors.firstName}</p>
-            ) : null}
+            {/*{formik.touched.firstName && formik.errors.firstName ? (*/}
+            {/*  <p style={{ color: "red" }}>{formik.errors.firstName}</p>*/}
+            {/*) : null}*/}
           </div>
           <div className={styled.formGroup}>
-            <label htmlFor="lastName">LastName</label>
-            <input
+            <TextField
+              error={
+                formik.touched.lastName && formik.errors.lastName ? true : false
+              }
+              label="LastName"
+              variant="outlined"
               name="lastName"
               onChange={formik.handleChange}
               value={formik.values.lastName}
               onBlur={formik.handleBlur}
             />
-            {formik.touched.lastName && formik.errors.lastName ? (
-              <p style={{ color: "red" }}>{formik.errors.lastName}</p>
-            ) : null}
+            {/*{formik.touched.lastName && formik.errors.lastName ? (*/}
+            {/*  <p style={{ color: "red" }}>{formik.errors.lastName}</p>*/}
+            {/*) : null}*/}
           </div>
           <div className={styled.formGroup}>
-            <label htmlFor="age">Age</label>
-            <input
+            <TextField
+              error={formik.touched.age && formik.errors.age ? true : false}
+              label="Age"
+              variant="outlined"
               name="age"
               onChange={formik.handleChange}
               value={formik.values.age}
               onBlur={formik.handleBlur}
             />
-            {formik.touched.age && formik.errors.age ? (
-              <p style={{ color: "red" }}>{formik.errors.age}</p>
-            ) : null}
+            {/*{formik.touched.age && formik.errors.age ? (*/}
+            {/*  <p style={{ color: "red" }}>{formik.errors.age}</p>*/}
+            {/*) : null}*/}
           </div>
           <div className={styled.formGroup}>
-            <label htmlFor="city">City</label>
-            <input
+            <TextField
+              error={formik.touched.city && formik.errors.city ? true : false}
+              label="City"
+              variant="outlined"
               name="city"
               onChange={formik.handleChange}
               value={formik.values.city}
               onBlur={formik.handleBlur}
             />
-            {formik.touched.city && formik.errors.city ? (
-              <p style={{ color: "red" }}>{formik.errors.city}</p>
-            ) : null}
+            {/*{formik.touched.city && formik.errors.city ? (*/}
+            {/*  <p style={{ color: "red" }}>{formik.errors.city}</p>*/}
+            {/*) : null}*/}
           </div>
           <div className={styled.formGroup}>
-            <label htmlFor="avatar">Avatar</label>
-            <input
-              name="avatar"
-              type="file"
+            <MyUpload
+              name="img"
               onChange={(event) => {
                 setImage(event.target.files[0]);
               }}
               value={formik.values.img}
-            />
+            >
+              Upload avatar
+            </MyUpload>
+            {/*<label htmlFor="avatar">Avatar</label>*/}
+            {/*<input*/}
+            {/*  name="avatar"*/}
+            {/*  type="file"*/}
+            {/*  onChange={(event) => {*/}
+            {/*    setImage(event.target.files[0]);*/}
+            {/*  }}*/}
+            {/*  value={formik.values.img}*/}
+            {/*/>*/}
           </div>
           <div className={styled.btnGroup}>
             <Button
