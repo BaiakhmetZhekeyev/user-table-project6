@@ -18,6 +18,13 @@
     width: 25em;
 }
 
+.uploadWrapper {
+    display: flex;
+    margin-bottom: 2rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .formGroup {
     display: flex;
     flex-direction: column;

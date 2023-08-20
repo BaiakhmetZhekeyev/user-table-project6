@@ -1,10 +1,18 @@
 import React from "react";
 import styled from "./UserForm.module.css";
 import { useFormik } from "formik";
-import { Button } from "@mui/material";
-import * as Yup from "yup";
+import { Avatar, Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import MyUpload from "./UI/MyUpload/MyUpload";
+import MyUpload from "../UI/MyUpload/MyUpload";
+import { USER_VALIDATION } from "./UserValidation";
+
+const defaultValue = {
+  img: null,
+  firstName: "",
+  lastName: "",
+  age: "",
+  city: "",
+};
 
 const UserForm = ({
   setIsModalActive,
@@ -13,27 +21,11 @@ const UserForm = ({
   userToEdit,
   setUserToEdit,
 }) => {
-  const [image, setImage] = React.useState(userToEdit?.img || null);
+  const { img = null, ...restUserParams } = userToEdit || {};
+  const [image, setImage] = React.useState(img);
   const formik = useFormik({
-    initialValues: { ...userToEdit, img: null } || {
-      img: null,
-      firstName: "",
-      lastName: "",
-      age: "",
-      city: "",
-    },
-    validationSchema: Yup.object({
-      firstName: Yup.string()
-        .max(15, "Must be 15 characters or less")
-        .required("Required"),
-      lastName: Yup.string()
-        .max(15, "Must be 15 characters or less")
-        .required("Required"),
-      age: Yup.number("It must be number").min(0).max(100).required("Required"),
-      city: Yup.string()
-        .max(15, "Must be 15 characters or less")
-        .required("Required"),
-    }),
+    initialValues: restUserParams || defaultValue,
+    validationSchema: USER_VALIDATION,
 
     onSubmit: (values) => {
       if (userToEdit) {
@@ -55,6 +47,26 @@ const UserForm = ({
     <div className={styled.modalContainer}>
       <div className={styled.modal}>
         <form onSubmit={formik.handleSubmit}>
+          <div className={styled.uploadWrapper}>
+            {image ? (
+              <Avatar
+                sx={{ width: 100, height: 100 }}
+                src={URL.createObjectURL(image)}
+              />
+            ) : (
+              <Avatar sx={{ width: 100, height: 100 }} />
+            )}
+            <MyUpload
+              name="img"
+              onChange={(event) => {
+                setImage(event.target.files[0]);
+              }}
+              value={formik.values.img}
+              accept={"image/*"}
+            >
+              {image ? "Изменить картинку" : "Загрузить картинку"}
+            </MyUpload>
+          </div>
           <div className={styled.formGroup}>
             <TextField
               error={
@@ -69,9 +81,9 @@ const UserForm = ({
               value={formik.values.firstName}
               onBlur={formik.handleBlur}
             />
-            {/*{formik.touched.firstName && formik.errors.firstName ? (*/}
-            {/*  <p style={{ color: "red" }}>{formik.errors.firstName}</p>*/}
-            {/*) : null}*/}
+            {formik.touched.firstName && formik.errors.firstName ? (
+              <p style={{ color: "red" }}>{formik.errors.firstName}</p>
+            ) : null}
           </div>
           <div className={styled.formGroup}>
             <TextField
@@ -85,9 +97,9 @@ const UserForm = ({
               value={formik.values.lastName}
               onBlur={formik.handleBlur}
             />
-            {/*{formik.touched.lastName && formik.errors.lastName ? (*/}
-            {/*  <p style={{ color: "red" }}>{formik.errors.lastName}</p>*/}
-            {/*) : null}*/}
+            {formik.touched.lastName && formik.errors.lastName ? (
+              <p style={{ color: "red" }}>{formik.errors.lastName}</p>
+            ) : null}
           </div>
           <div className={styled.formGroup}>
             <TextField
@@ -99,9 +111,9 @@ const UserForm = ({
               value={formik.values.age}
               onBlur={formik.handleBlur}
             />
-            {/*{formik.touched.age && formik.errors.age ? (*/}
-            {/*  <p style={{ color: "red" }}>{formik.errors.age}</p>*/}
-            {/*) : null}*/}
+            {formik.touched.age && formik.errors.age ? (
+              <p style={{ color: "red" }}>{formik.errors.age}</p>
+            ) : null}
           </div>
           <div className={styled.formGroup}>
             <TextField
@@ -113,29 +125,9 @@ const UserForm = ({
               value={formik.values.city}
               onBlur={formik.handleBlur}
             />
-            {/*{formik.touched.city && formik.errors.city ? (*/}
-            {/*  <p style={{ color: "red" }}>{formik.errors.city}</p>*/}
-            {/*) : null}*/}
-          </div>
-          <div className={styled.formGroup}>
-            <MyUpload
-              name="img"
-              onChange={(event) => {
-                setImage(event.target.files[0]);
-              }}
-              value={formik.values.img}
-            >
-              Upload avatar
-            </MyUpload>
-            {/*<label htmlFor="avatar">Avatar</label>*/}
-            {/*<input*/}
-            {/*  name="avatar"*/}
-            {/*  type="file"*/}
-            {/*  onChange={(event) => {*/}
-            {/*    setImage(event.target.files[0]);*/}
-            {/*  }}*/}
-            {/*  value={formik.values.img}*/}
-            {/*/>*/}
+            {formik.touched.city && formik.errors.city ? (
+              <p style={{ color: "red" }}>{formik.errors.city}</p>
+            ) : null}
           </div>
           <div className={styled.btnGroup}>
             <Button

@@ -16,6 +16,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ReorderIcon from "@mui/icons-material/Reorder";
 
+function updateRatings(userArray) {
+  return userArray.map((curr, index) => {
+    curr.rating = index + 1;
+    return curr;
+  });
+}
+
 export default function UsersTable({
   users,
   setUsers,
@@ -27,12 +34,8 @@ export default function UsersTable({
     const usersArr = Array.from(users);
     const [reorderedItem] = usersArr.splice(result.source.index, 1);
     usersArr.splice(result.destination.index, 0, reorderedItem);
-    setUsers(
-      usersArr.map((curr, index) => {
-        curr.rating = index + 1;
-        return curr;
-      }),
-    );
+    const newUsers = updateRatings(usersArr);
+    setUsers(newUsers);
   }
 
   return (
@@ -42,7 +45,6 @@ export default function UsersTable({
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Move</TableCell>
                 <TableCell>Avatar</TableCell>
                 <TableCell>FirstName</TableCell>
                 <TableCell>LastName</TableCell>
@@ -50,6 +52,7 @@ export default function UsersTable({
                 <TableCell>City</TableCell>
                 <TableCell>Rating</TableCell>
                 <TableCell>Actions</TableCell>
+                <TableCell>Move</TableCell>
               </TableRow>
             </TableHead>
             <Droppable droppableId={"TableBody"}>
@@ -66,14 +69,16 @@ export default function UsersTable({
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                         >
-                          <TableCell {...provided.dragHandleProps}>
-                            <ReorderIcon />
-                          </TableCell>
                           <TableCell>
                             {user.img ? (
-                              <Avatar src={URL.createObjectURL(user.img)} />
+                              <Avatar
+                                sx={{ width: 48, height: 48 }}
+                                src={URL.createObjectURL(user.img)}
+                              />
                             ) : (
-                              <Avatar sx={{ bgcolor: "blue" }}>
+                              <Avatar
+                                sx={{ width: 48, height: 48, bgcolor: "blue" }}
+                              >
                                 {user.firstName[0] + user.lastName[0]}
                               </Avatar>
                             )}
@@ -100,6 +105,9 @@ export default function UsersTable({
                             >
                               <EditIcon fontSize="small" />
                             </IconButton>
+                          </TableCell>
+                          <TableCell {...provided.dragHandleProps}>
+                            <ReorderIcon />
                           </TableCell>
                         </TableRow>
                       )}
