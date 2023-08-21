@@ -33,5 +33,9 @@
 
 .btnGroup {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+}
+
+.validationError {
+    color: red;
 }
