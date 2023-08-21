@@ -5,7 +5,7 @@
 
 .myInputLabel {
     height: 40px;
-    /*width: 120px;*/
+    width: 150px;
     border-radius: 6px;
     border: 1px dashed #999;
     display: flex;
@@ -16,4 +16,5 @@
 .myInputLabel:hover {
     color: #4a6bef;
     border: 1px dashed #4a6bef;
+    cursor: pointer;
 }

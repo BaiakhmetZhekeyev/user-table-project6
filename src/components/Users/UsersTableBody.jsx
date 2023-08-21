@@ -26,10 +26,10 @@ const UsersTableBody = ({ users, deleteUser, getUserToEdit }) => {
               </TableCell>
               <TableCell>{user.firstName}</TableCell>
               <TableCell>{user.lastName}</TableCell>
-              <TableCell>{user.age}</TableCell>
+              <TableCell align={"center"}>{user.age}</TableCell>
               <TableCell>{user.city}</TableCell>
-              <TableCell>{user.rating}</TableCell>
-              <TableCell>
+              <TableCell align={"center"}>{user.rating}</TableCell>
+              <TableCell align={"center"}>
                 <IconButton
                   aria-label="delete"
                   size="small"

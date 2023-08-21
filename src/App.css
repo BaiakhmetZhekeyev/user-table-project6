@@ -5,7 +5,15 @@
 
 .App {
   display: flex;
-  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: #e1ece5;
+}
+
+.usersTableWrapper {
+  display: flex;
   flex-direction: column;
-  margin-top: 20px;
+  align-items: center;
+  margin-top: 40px;
 }

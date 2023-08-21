@@ -46,14 +46,19 @@ export default function UsersTable({
   }
 
   return (
-    <div className={styled.contentWrapper}>
+    <div>
       <DragDropContext onDragEnd={handleOnDragEnd}>
-        <TableContainer className={styled.tableWrapper} component={Paper}>
+        <TableContainer
+          classes={{ root: styled.tableWrapper }}
+          component={Paper}
+        >
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
                 {TABLE_HEAD.map((item) => (
-                  <TableCell>{item}</TableCell>
+                  <TableCell classes={{ root: styled.tableHead }}>
+                    {item}
+                  </TableCell>
                 ))}
               </TableRow>
             </TableHead>

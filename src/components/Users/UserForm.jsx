@@ -24,12 +24,11 @@ const userInfo = [
 const UserForm = ({
   setIsModalActive,
   addUser,
-  tableLenght,
+  lastUserRating,
   userToEdit,
   setUserToEdit,
 }) => {
-  const { img = null, ...restUserParams } = userToEdit || {};
-  const [image, setImage] = React.useState(img);
+  const [image, setImage] = React.useState(userToEdit?.img || null);
 
   const handleSubmit = (values) => {
     if (userToEdit) {
@@ -41,16 +40,16 @@ const UserForm = ({
       });
       return;
     }
-    const userRating = tableLenght + 1;
+    const newUserRating = lastUserRating + 1;
     let userId = Date.now().toString();
-    addUser({ ...values, id: userId, rating: userRating, img: image });
+    addUser({ ...values, id: userId, rating: newUserRating, img: image });
   };
 
   return (
     <div className={styled.modalContainer}>
       <div className={styled.modal}>
         <Formik
-          initialValues={restUserParams || defaultValue}
+          initialValues={userToEdit || defaultValue}
           validationSchema={USER_VALIDATION}
           onSubmit={handleSubmit}
         >
@@ -72,7 +71,7 @@ const UserForm = ({
                   }}
                   accept={"image/*"}
                 >
-                  {image ? "Изменить картинку" : "Загрузить картинку"}
+                  {image ? "Upload image" : "Change image"}
                 </MyUpload>
               </div>
               {userInfo.map((item) => {

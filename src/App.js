@@ -1,56 +1,19 @@
 import "./App.css";
-import UserForm from "./components/UserForm";
-import UsersTable from "./components/UsersTable";
+import UserForm from "./components/Users/UserForm";
+import UsersTable from "./components/Users/UsersTable";
 import { Button } from "@mui/material";
 import * as React from "react";
-import MyUpload from "./components/UI/MyUpload/MyUpload";
 
 function App() {
   const [users, setUsers] = React.useState([
     {
-      img: "",
+      img: null,
       firstName: "Baiakhmet",
       lastName: "Zhekeyev",
       age: 25,
       city: "Ayagoz",
       rating: 1,
       id: "123",
-    },
-    {
-      img: "",
-      firstName: "Aisultan",
-      lastName: "Baltabayev",
-      age: 26,
-      city: "Abay",
-      rating: 2,
-      id: "124",
-    },
-    {
-      img: "",
-      firstName: "John",
-      lastName: "First",
-      age: 16,
-      city: "Taraz",
-      rating: 3,
-      id: "125",
-    },
-    {
-      img: "",
-      firstName: "Yernar",
-      lastName: "Yesenbolat",
-      age: 31,
-      city: "Shymkent",
-      rating: 4,
-      id: "126",
-    },
-    {
-      img: "",
-      firstName: "Zhasik",
-      lastName: "Zhasontory",
-      age: 28,
-      city: "Nur-sultan",
-      rating: 5,
-      id: "127",
     },
   ]);
 
@@ -72,11 +35,16 @@ function App() {
   };
 
   const deleteUser = (user) => {
-    const usersArr = Array.from(users);
-    usersArr.forEach((curr) =>
-      curr.rating > user.rating ? curr.rating-- : curr.rating,
-    );
-    setUsers(usersArr.filter((curr) => user.id !== curr.id));
+    const newUsers = users.reduce((acc, item) => {
+      if (item.id === user.id) {
+        return acc;
+      } else if (item.rating > user.rating) {
+        item.rating--;
+      }
+      acc.push(item);
+      return acc;
+    }, []);
+    setUsers(newUsers);
   };
 
   const getUserToEdit = (user) => {
@@ -86,28 +54,30 @@ function App() {
 
   return (
     <div className="App">
-      <Button
-        onClick={() => setIsModalActive(true)}
-        variant="contained"
-        style={{ width: "150px" }}
-      >
-        Add User
-      </Button>
-      {isModalActive && (
-        <UserForm
-          setIsModalActive={setIsModalActive}
-          addUser={addUser}
-          tableLenght={users.length}
-          userToEdit={userToEdit}
-          setUserToEdit={setUserToEdit}
+      <div className="usersTableWrapper">
+        <Button
+          onClick={() => setIsModalActive(true)}
+          variant="contained"
+          style={{ width: "200px" }}
+        >
+          Add User
+        </Button>
+        <UsersTable
+          users={users}
+          setUsers={setUsers}
+          deleteUser={deleteUser}
+          getUserToEdit={getUserToEdit}
         />
-      )}
-      <UsersTable
-        users={users}
-        setUsers={setUsers}
-        deleteUser={deleteUser}
-        getUserToEdit={getUserToEdit}
-      />
+        {isModalActive && (
+          <UserForm
+            setIsModalActive={setIsModalActive}
+            addUser={addUser}
+            lastUserRating={users[users.length - 1]?.rating}
+            userToEdit={userToEdit}
+            setUserToEdit={setUserToEdit}
+          />
+        )}
+      </div>
     </div>
   );
 }
