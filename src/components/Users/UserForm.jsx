@@ -87,11 +87,11 @@ const UserForm = ({
                         errors[item.name] && touched[item.name] ? true : false
                       }
                     />
-                    {errors[item.name] && touched[item.name] ? (
-                      <p className={styled.validationError}>
-                        {errors[item.name]}
-                      </p>
-                    ) : null}
+                    <ErrorMessage
+                      name={item.name}
+                      component={"p"}
+                      className={styled.validationError}
+                    />
                   </div>
                 );
               })}
